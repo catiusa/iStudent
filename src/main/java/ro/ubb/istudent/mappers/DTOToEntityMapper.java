@@ -2,6 +2,7 @@ package ro.ubb.istudent.mappers;
 
 import org.bson.types.ObjectId;
 import org.springframework.stereotype.Component;
+import ro.ubb.istudent.domain.Gender;
 import ro.ubb.istudent.domain.User;
 import ro.ubb.istudent.dto.UserDTO;
 
@@ -18,7 +19,7 @@ public class DTOToEntityMapper {
                 .address(userDTO.getAddress())
                 .age(userDTO.getAge())
                 .phoneNumber(userDTO.getPhoneNumber())
-                .gender(userDTO.getGender())
+                .gender(Gender.valueOf(userDTO.getGender()))
                 .build();
         if(userDTO.getId() != null){
             user.setId(new ObjectId(userDTO.getId()));

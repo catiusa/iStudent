@@ -1,6 +1,7 @@
 package ro.ubb.istudent.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -45,29 +46,33 @@ public class AuthenticationController {
 
     @Loggable
     @RequestMapping(path = "/login", method = RequestMethod.POST)
-    public ResponseEntity<?> authenticationRequest(@RequestBody AuthenticationRequest authenticationRequest)
-            throws AuthenticationException {
+    public ResponseEntity<?> authenticationRequest(@RequestBody AuthenticationRequest authenticationRequest) {
 
-        // Perform the authentication
-        String userNameOrEmail = authenticationRequest.getEmail() != null ? authenticationRequest.getEmail() : authenticationRequest.getUserName();
+        String token;
+        try {
+            // Perform the authentication
+            String userNameOrEmail = authenticationRequest.getEmail() != null ? authenticationRequest.getEmail() : authenticationRequest.getUserName();
 
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        userNameOrEmail,
-                        authenticationRequest.getPassword()
-                ));
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            userNameOrEmail,
+                            authenticationRequest.getPassword()
+                    ));
 
-        SecurityContextHolder.getContext().setAuthentication(authentication);
+            SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        // Reload password post-authentication so we can generate token
-        UserDetails userDetails = userDetailsService.loadUserByUsername(userNameOrEmail);
-        String token = tokenUtils.generateToken(userDetails);
-        Date expirationDate = tokenUtils.getExpirationDateFromToken(token);
+            // Reload password post-authentication so we can generate token
+            UserDetails userDetails = userDetailsService.loadUserByUsername(userNameOrEmail);
+            token = tokenUtils.generateToken(userDetails);
+            Date expirationDate = tokenUtils.getExpirationDateFromToken(token);
 
-        validTokenRepository.save(ValidToken.builder()
-                .token(token)
-                .expirationDate(expirationDate)
-                .build());
+            validTokenRepository.save(ValidToken.builder()
+                    .token(token)
+                    .expirationDate(expirationDate)
+                    .build());
+        } catch(AuthenticationException e) {
+            return new ResponseEntity("Invalid credentials", HttpStatus.BAD_REQUEST);
+        }
 
         return ResponseEntity.ok(new AuthenticationResponse(token));
     }

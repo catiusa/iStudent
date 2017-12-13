@@ -23,7 +23,7 @@ public class UserDTO implements Serializable {
     private String address;
     private String phoneNumber;
     private Integer age;
-    private Gender gender;
+    private String gender;
     private List<UserRole> roles;
 
 }

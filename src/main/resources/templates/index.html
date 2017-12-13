@@ -22,8 +22,6 @@
         <div id="signup">
             <h1>iStudent</h1>
 
-
-
                 <div class="field-wrap">
                     <label>
                         Username<span class="req">*</span>
@@ -58,8 +56,25 @@
                     </label>
                     <input id="address" type="text" required autocomplete="off"/>
                 </div>
-
-
+                <div class="field-wrap">
+                    <label>
+                        Age<span class="req">*</span>
+                    </label>
+                    <input id="age" type="text" required autocomplete="off"/>
+                </div>
+                <div class="field-wrap">
+                    <!--
+                    <label>
+                        Gender<span class="req">*</span>
+                    </label>
+                    -->
+                    <select id="genderSelect">
+                        <option>M</option>
+                        <option>F</option>
+                    </select>
+                   <!-- <input id="gender" type="text" required autocomplete="off"/> -->
+                </div>
+              <!--  <input type="submit" value="Get Started" /> -->
                 <button class="button button-block" onclick="authenticate()">Get Started</button>
 
 
@@ -75,21 +90,21 @@
                     <label>
                         Username<span class="req">*</span>
                     </label>
-                    <input type="username" required autocomplete="off"/>
+                    <input id="loginUsername" type="text" required autocomplete="off"/>
                 </div>
 
                 <div class="field-wrap">
                     <label>
                         Email Address<span class="req">*</span>
                     </label>
-                    <input type="email" required autocomplete="off"/>
+                    <input id="loginEmail" type="email" required autocomplete="off"/>
                 </div>
 
                 <div class="field-wrap">
                     <label>
                         Password<span class="req">*</span>
                     </label>
-                    <input type="password" required autocomplete="off"/>
+                    <input id="loginPassword" type="password" required autocomplete="off"/>
                 </div>
 
                 <p class="forgot"><a href="#">Forgot Password?</a></p>

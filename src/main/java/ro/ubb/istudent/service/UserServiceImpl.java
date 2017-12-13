@@ -33,6 +33,9 @@ public class UserServiceImpl implements UserService {
         User user = dtoToEntityMapper.toUser(userDTO);
         String password = bCryptPasswordEncoder.encode(user.getPassword());
         user.setPassword(password);
+        if(userRepository.save(user) != null) {
+            System.out.println("dshjagdsha");
+        }
         return userRepository.save(user) != null;
     }
 

@@ -1,6 +1,8 @@
 package ro.ubb.istudent.mappers;
 
+
 import org.springframework.stereotype.Component;
+import ro.ubb.istudent.domain.Gender;
 import ro.ubb.istudent.domain.User;
 import ro.ubb.istudent.dto.UserDTO;
 
@@ -17,8 +19,9 @@ public class EntityDTOMapper {
                 .address(user.getAddress())
                 .age(user.getAge())
                 .phoneNumber(user.getPhoneNumber())
-                .gender(user.getGender())
+                .gender(user.getGender().name())
                 .build();
     }
+
 
 }
