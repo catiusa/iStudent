@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.*;
 import ro.ubb.istudent.dto.UserDTO;
 import ro.ubb.istudent.service.UserService;
 
+import java.util.Date;
+
 @RestController
 @RequestMapping("/user")
 public class UserController {
@@ -48,5 +50,4 @@ public class UserController {
     public ResponseEntity<?> getUserByUserName(@PathVariable String username) {
         return ResponseEntity.ok(userService.findByUserName(username));
     }
-
 }

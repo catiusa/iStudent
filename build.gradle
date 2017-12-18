@@ -57,6 +57,7 @@ dependencies {
     compileOnly 'org.projectlombok:lombok:1.16.18'
 
     compile group: 'com.rabbitmq', name: 'amqp-client', version: '5.0.0'
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-mail', version: '2.0.0.M7'
 
     runtime('com.h2database:h2')
     runtime('mysql:mysql-connector-java')

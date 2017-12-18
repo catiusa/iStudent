@@ -1,0 +1,33 @@
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Teacher Form</title>
+    <link href='https://fonts.googleapis.com/css?family=Titillium+Web:400,300,600' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+    <link rel="stylesheet" href="/css/addTeacher.css">
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+
+</head>
+
+<body>
+<div class="container">
+    <h2>Add teacher</h2>
+    <p>Give the email addres for a new teacher you want to register. An invitation will be sent to his email.</p>
+    <form>
+        <div class="input-group">
+            <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+            <input id="email" type="text" class="form-control" name="email" placeholder="Email">
+        </div>
+    </form>
+    <button type="button" class="btn btn-primary" onclick="add()">Add</button>
+</div>
+
+<script src="/js/addTeacher.js"></script>
+
+</body>
+</html>

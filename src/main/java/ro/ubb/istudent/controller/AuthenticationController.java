@@ -3,6 +3,8 @@ package ro.ubb.istudent.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -20,8 +22,10 @@ import ro.ubb.istudent.aspects.Loggable;
 import ro.ubb.istudent.domain.ValidToken;
 import ro.ubb.istudent.dto.AuthenticationRequest;
 import ro.ubb.istudent.dto.AuthenticationResponse;
+import ro.ubb.istudent.dto.UserDTO;
 import ro.ubb.istudent.repository.ValidTokenRepository;
 import ro.ubb.istudent.security.TokenUtils;
+import ro.ubb.istudent.service.UserService;
 import ro.ubb.istudent.util.HttpHeaders;
 
 import javax.servlet.http.HttpServletRequest;
@@ -35,13 +39,18 @@ public class AuthenticationController {
     private final TokenUtils tokenUtils;
     private final UserDetailsService userDetailsService;
     private final ValidTokenRepository validTokenRepository;
+    private final UserService userService;
 
     @Autowired
-    public AuthenticationController(TokenUtils tokenUtils, AuthenticationManager authenticationManager, UserDetailsService userDetailsService, ValidTokenRepository validTokenRepository) {
+    private JavaMailSender mailSender;
+
+    @Autowired
+    public AuthenticationController(TokenUtils tokenUtils, AuthenticationManager authenticationManager, UserDetailsService userDetailsService, ValidTokenRepository validTokenRepository, UserService userService) {
         this.tokenUtils = tokenUtils;
         this.authenticationManager = authenticationManager;
         this.userDetailsService = userDetailsService;
         this.validTokenRepository = validTokenRepository;
+        this.userService = userService;
     }
 
     @Loggable
@@ -95,6 +104,42 @@ public class AuthenticationController {
             return ResponseEntity.ok("bad");
         }
 
+    }
+    @RequestMapping(path = "/addTeacher", method = RequestMethod.POST)
+    public ResponseEntity<?> addTeacher(@RequestBody String teacherEmail) {
+
+        String token;
+        if (teacherEmail != null || teacherEmail != "") {
+            try {
+                UserDTO teacher = new UserDTO().builder().email(teacherEmail).build();
+                userService.saveUser(teacher);
+
+                UserDetails userDetails = userDetailsService.loadUserByUsername(teacherEmail);
+                token = tokenUtils.generateToken(userDetails);
+                Date expirationDate = tokenUtils.getExpirationDateFromToken(token);
+
+                validTokenRepository.save(ValidToken.builder()
+                        .token(token)
+                        .expirationDate(expirationDate)
+                        .build());
+                String teacherAddress = teacher.getEmail();
+                String subject = "Registration :";
+                String confirmationUrl = "/regitrationConfirm.html?token=" + token;
+
+                SimpleMailMessage email = new SimpleMailMessage();
+                email.setTo(teacherAddress);
+                email.setSubject(subject);
+                email.setText("Registration to our site! http://localhost:8080" + confirmationUrl);
+                mailSender.send(email);
+                return ResponseEntity.ok("ok");
+            } catch (AuthenticationException e) {
+                return new ResponseEntity("Invalid credentials", HttpStatus.BAD_REQUEST);
+            } catch (Throwable throwable) {
+                return new ResponseEntity("Teacher not saved!", HttpStatus.BAD_REQUEST);
+            }
+        }
+        else
+            return ResponseEntity.ok("Invalid email string!");
     }
 
 }
