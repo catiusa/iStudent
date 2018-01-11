@@ -89,14 +89,21 @@ function login() {
             success: function (data) {
                 alert("Success");
                 console.log(data);
+
+                //go to add teacher as admin
+                //TO DO : go to this page just as admin
+                window.localStorage.setItem("token", data['token']);
+                var location = window.location.href.split("/");
+                location.pop();
+                window.location.href = location.join("/") + "/html/addTeacher.html";
             },
             error: function (data, textStatus) {
                 alert(data.responseText);
             }
         });
     }
-
 }
+
 
 
 $('.form').find('input, textarea').on('keyup blur focus', function (e) {

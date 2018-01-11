@@ -1,9 +1,6 @@
 package ro.ubb.istudent.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import ro.ubb.istudent.domain.Gender;
 import ro.ubb.istudent.domain.UserRole;
 
@@ -14,6 +11,8 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
+@Setter
 public class UserDTO implements Serializable {
 
     private String id;

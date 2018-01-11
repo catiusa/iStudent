@@ -48,6 +48,9 @@ dependencies {
     compile('org.springframework.boot:spring-boot-starter-web')
     compile('net.sourceforge.nekohtml:nekohtml:1.9.21')
     compile('org.springframework.boot:spring-boot-starter-data-mongodb')
+
+    compile('org.springframework.boot:spring-boot-starter-mail')
+
     compile("de.flapdoodle.embed:de.flapdoodle.embed.mongo")
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-security'
     compile group: 'io.jsonwebtoken', name: 'jjwt', version: '0.7.0'
@@ -57,7 +60,7 @@ dependencies {
     compileOnly 'org.projectlombok:lombok:1.16.18'
 
     compile group: 'com.rabbitmq', name: 'amqp-client', version: '5.0.0'
-    compile group: 'org.springframework.boot', name: 'spring-boot-starter-mail', version: '2.0.0.M7'
+    //compile group: 'org.springframework.boot', name: 'spring-boot-starter-mail', version: '2.0.0.M7'
 
     runtime('com.h2database:h2')
     runtime('mysql:mysql-connector-java')

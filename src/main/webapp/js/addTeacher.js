@@ -1,21 +1,36 @@
-url = "localhost:8080"
-add()
+url = "http://localhost:8080"
+function add()
 {
     var email = $('#email').val();
-    $.post({
-        url: url + "/addTeacher",
-        async: true,
-        contentType: "application/json",
-        headers: {"X-Auth-Token": window.localStorage.getItem("token")},
-        data: JSON.stringify({
-            "email": email
-        }),
-        success: function () {
-            alert("Add teacher done successfully!");
-            getAllTechnologies();
-        },
-        error: function () {
-            alert('Error, cannot add teacher!');
-        }
-    });
+    var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    if (!re.test(email)) {
+        alert("Please enter a valid email address");
+    }
+    else {
+        var params = {
+            "userName": "teacher",
+            "email": email,
+            "password": "no",
+            "address": "no",
+            "phoneNumber": "0000000000",
+            "age": 99,
+            "gender": "F",
+            "roles": ["TEACHER"]
+        };
+        $.ajax({
+            type: "POST",
+            url: "../teacher/add",
+            data: JSON.stringify(params),
+            dataType: "text",
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                console.log(data);
+                $('#email').val("");
+            },
+            error: function (data, textStatus) {
+                alert(data.responseText);
+            }
+        });
+    }
+
 }

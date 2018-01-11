@@ -95,6 +95,8 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .regexMatchers("/.*.jpeg").permitAll()
                 .antMatchers("/login").permitAll()
                 .antMatchers("/user/save").permitAll()
+                .antMatchers("/teacher/add").permitAll()
+                .antMatchers("/teacher/registration").permitAll()
                 .antMatchers("/v2/api-docs").permitAll()
                 .antMatchers(HttpMethod.OPTIONS).permitAll()
                 .anyRequest().authenticated();
