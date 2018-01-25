@@ -46,6 +46,11 @@ public class UserController {
         return ResponseEntity.ok(userService.findByEmail(email));
     }
 
+    @RequestMapping(value = "/getAll", method = RequestMethod.GET)
+    public ResponseEntity<?> getAll(){
+        return ResponseEntity.ok(userService.getAll());
+    }
+
     @RequestMapping(value = "/findByUserName/{username}", method = RequestMethod.GET)
     public ResponseEntity<?> getUserByUserName(@PathVariable String username) {
         return ResponseEntity.ok(userService.findByUserName(username));

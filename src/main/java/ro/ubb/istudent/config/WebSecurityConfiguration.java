@@ -95,7 +95,9 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .regexMatchers("/.*.jpeg").permitAll()
                 .antMatchers("/login").permitAll()
                 .antMatchers("/user/save").permitAll()
-                .antMatchers("/teacher/add").permitAll()
+                .antMatchers("/user/getAll").permitAll() //just for test, shouldn't be here
+                .antMatchers("/user/findByEmail/**").permitAll() //shouldn't be here
+                .antMatchers("/teacher/add").permitAll() //this shouldn't be here
                 .antMatchers("/teacher/registration").permitAll()
                 .antMatchers("/v2/api-docs").permitAll()
                 .antMatchers(HttpMethod.OPTIONS).permitAll()

@@ -1,3 +1,6 @@
+var url = "http://localhost:8080/";
+
+//Only students can SignUp
 function authenticate() {
     var username = $("#username").val();
     var email = $("#email").val();
@@ -6,14 +9,14 @@ function authenticate() {
     var address = $("#address").val();
     var gender = $("#genderSelect").val();
     var age = $("#age").val();
-    var roles = ["ADMIN"];
+    var roles = ["STUDENT"];
     var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     var phoneRe = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
-    if(!(username && email && password && phone && address && gender && age)) {
+    if (!(username && email && password && phone && address && gender && age)) {
         alert("None of the fields can be left empty!");
     }
 
-    else if (!re.test(email)){
+    else if (!re.test(email)) {
         alert("Please enter a valid email address");
     }
     else if (!phoneRe.test(phone)) {
@@ -35,9 +38,7 @@ function authenticate() {
             "roles": roles
         };
 
-
         console.log(JSON.stringify(params));
-
 
         $.ajax({
             type: "POST",
@@ -63,10 +64,10 @@ function login() {
     var email = $("#loginEmail").val();
     var password = $("#loginPassword").val();
     var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    if(!(username && email && password)) {
+    if (!(username && email && password)) {
         alert("None of the fields can be left empty!");
     }
-    else if (!re.test(email)){
+    else if (!re.test(email)) {
         alert("Please enter a valid email address");
     }
     else {
@@ -76,26 +77,21 @@ function login() {
             "password": password
         };
 
-
         console.log(JSON.stringify(params));
-
 
         $.ajax({
             type: "POST",
             url: "/login",
-            data: JSON.stringify(params),
             dataType: "text",
             contentType: "application/json; charset=utf-8",
+            data: JSON.stringify(params),
             success: function (data) {
                 alert("Success");
                 console.log(data);
 
-                //go to add teacher as admin
-                //TO DO : go to this page just as admin
                 window.localStorage.setItem("token", data['token']);
-                var location = window.location.href.split("/");
-                location.pop();
-                window.location.href = location.join("/") + "/html/addTeacher.html";
+                console.log("Email :  ", params.email);
+                getUserDataAnRedirect(params.email, data['token']);
             },
             error: function (data, textStatus) {
                 alert(data.responseText);
@@ -104,6 +100,51 @@ function login() {
     }
 }
 
+function getUserDataAnRedirect(email, token) {
+    $.ajax({
+        url: "user/findByEmail/" + email,
+        type: 'GET',
+        async: true,
+        contentType: "application/json; charset=utf-8",
+        //headers: {"X-Auth-Token": token},
+        dataType: 'json',
+        success: function (data) {
+            console.log("data in success function : ", data);
+            var redirectToAdmin = false;
+            for (var key in data) {
+                if (key === "roles") {
+                    var roles = [];
+                    for (var i = 0; i < data[key].length; i++) {
+                        var role = data[key][i];
+                        roles.push(role);
+                        if (role === "ADMIN") {
+                            redirectToAdmin = true;
+                        }
+                    }
+                }
+                else if (data.hasOwnProperty(key) && data[key]) {
+                    window.localStorage.setItem(key, data[key]);
+                }
+            }
+
+            if (redirectToAdmin === true) {
+                go_to_page("addTeacher.html");
+            }
+            else {
+                go_to_page("normalUserHomePage.html");
+            }
+        },
+        error: function () {
+            alert("Error retrieving the data, contact the administrator.");
+        }
+    })
+}
+
+function go_to_page(file) {
+    var location = window.location.href.split("/");
+    location.pop();
+    window.location.href = location.join("/") + "/html/" + file;
+}
 
 
 $('.form').find('input, textarea').on('keyup blur focus', function (e) {
@@ -118,17 +159,17 @@ $('.form').find('input, textarea').on('keyup blur focus', function (e) {
             label.addClass('active highlight');
         }
     } else if (e.type === 'blur') {
-        if( $this.val() === '' ) {
+        if ($this.val() === '') {
             label.removeClass('active highlight');
         } else {
             label.removeClass('highlight');
         }
     } else if (e.type === 'focus') {
 
-        if( $this.val() === '' ) {
+        if ($this.val() === '') {
             label.removeClass('highlight');
         }
-        else if( $this.val() !== '' ) {
+        else if ($this.val() !== '') {
             label.addClass('highlight');
         }
     }
