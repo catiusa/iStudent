@@ -36,7 +36,7 @@ public class UserServiceImpl implements UserService {
         String password = bCryptPasswordEncoder.encode(user.getPassword());
         user.setPassword(password);
         if(userRepository.save(user) != null) {
-            System.out.println("dshjagdsha");
+          //  System.out.println("not able");
         }
         return userRepository.save(user) != null;
     }
