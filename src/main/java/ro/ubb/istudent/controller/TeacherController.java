@@ -1,6 +1,8 @@
 package ro.ubb.istudent.controller;
 
+import ch.qos.logback.classic.LoggerContext;
 import io.swagger.models.Model;
+import org.slf4j.ILoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -21,9 +23,15 @@ import ro.ubb.istudent.security.TokenUtils;
 import ro.ubb.istudent.service.UserService;
 
 import javax.mail.internet.MimeMessage;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import static jdk.nashorn.internal.runtime.regexp.joni.Config.log;
 
 @RestController
 @RequestMapping("/teacher")
@@ -110,10 +118,13 @@ public class TeacherController {
                         "12345678"
                 ));
 
+
         SecurityContextHolder.getContext().setAuthentication(authentication);
         UserDetails userDetails = userDetailsService.loadUserByUsername(email);
 
+
         if (tokenUtils.validateToken(token, userDetails)) {
+            response.addCookie(new Cookie("email",email));
             response.sendRedirect("http://localhost:8080/html/teacherRegistration.html");
             return "/html/teacherRegistration.html";
         } else {
@@ -121,4 +132,5 @@ public class TeacherController {
             return "/index.html";
         }
     }
+
 }
