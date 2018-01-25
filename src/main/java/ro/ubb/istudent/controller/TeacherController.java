@@ -117,8 +117,8 @@ public class TeacherController {
             response.sendRedirect("http://localhost:8080/html/teacherRegistration.html");
             return "/html/teacherRegistration.html";
         } else {
-            response.sendRedirect("http://localhost:8080/index.html");
-            return "/index.html";
+            response.sendRedirect("http://localhost:8080/");
+            return "";
         }
     }
 }

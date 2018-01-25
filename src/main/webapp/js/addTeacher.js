@@ -1,4 +1,9 @@
 url = "http://localhost:8080"
+$( document ).ready(function() {
+    if(window.localStorage.getItem("token") === null || window.localStorage.getItem("token") === "") {
+        window.location.href = url;
+    }
+});
 function add()
 {
     var email = $('#email').val();
@@ -34,3 +39,23 @@ function add()
     }
 
 }
+
+function logout() {
+    $.get({
+        url: "/logoutMe",
+        async: true,
+        contentType: "application/json",
+        headers: {"X-Auth-Token": window.localStorage.getItem("token")},
+        success: function () {
+            window.localStorage.setItem("token", "");
+            window.location.href = url;
+        },
+        error: function (la) {
+            alert(window.localStorage.getItem("token"));
+
+            window.localStorage.setItem("token", "");
+            window.location.href = url;
+        }
+    });
+}
+
