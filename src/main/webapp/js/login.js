@@ -47,7 +47,7 @@ function authenticate() {
             dataType: "text",
             contentType: "application/json; charset=utf-8",
             success: function (data) {
-                alert("Success");
+                alert(data);
                 console.log(data);
             },
             error: function (error) {
@@ -77,8 +77,6 @@ function login() {
             "password": password
         };
 
-        console.log(JSON.stringify(params));
-
         $.ajax({
             type: "POST",
             url: "/login",
@@ -86,12 +84,9 @@ function login() {
             contentType: "application/json; charset=utf-8",
             data: JSON.stringify(params),
             success: function (data) {
-                alert("Success");
-                console.log(data);
-
-                window.localStorage.setItem("token", data['token']);
+                window.localStorage.setItem("token",JSON.parse(data)["token"]);
                 console.log("Email :  ", params.email);
-                getUserDataAnRedirect(params.email, data['token']);
+                getUserDataAnRedirect(params.email, JSON.parse(data['token']));
             },
             error: function (data, textStatus) {
                 alert(data.responseText);
@@ -106,7 +101,7 @@ function getUserDataAnRedirect(email, token) {
         type: 'GET',
         async: true,
         contentType: "application/json; charset=utf-8",
-        //headers: {"X-Auth-Token": token},
+        headers: {"X-Auth-Token": token},
         dataType: 'json',
         success: function (data) {
             console.log("data in success function : ", data);
