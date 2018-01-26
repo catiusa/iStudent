@@ -86,7 +86,7 @@ function login() {
             success: function (data) {
                 window.localStorage.setItem("token",JSON.parse(data)["token"]);
                 console.log("Email :  ", params.email);
-                getUserDataAnRedirect(params.email, JSON.parse(data['token']));
+                getUserDataAnRedirect(params.email, JSON.parse(data)["token"]);
             },
             error: function (data, textStatus) {
                 alert(data.responseText);
