@@ -99,6 +99,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/user/findByEmail/**").permitAll() //shouldn't be here
                 .antMatchers("/teacher/add").permitAll() //this shouldn't be here
                 .antMatchers("/teacher/registration").permitAll()
+                .antMatchers("/user/update").permitAll()
                 .antMatchers("/v2/api-docs").permitAll()
                 .antMatchers(HttpMethod.OPTIONS).permitAll()
                 .anyRequest().authenticated();
