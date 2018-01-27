@@ -81,12 +81,11 @@ public class TeacherController {
                             .expirationDate(expirationDate)
                             .build());
 
-                    String teacherAddress = teacher.getEmail();
                     String confirmationUrl = "/teacher/registration?token=" + token + "&email=" + teacherEmail;
 
 
                     MessageSender m = new MessageSender(2);
-                    m.sendMessage(teacherAddress, confirmationUrl);
+                    m.sendMessage(teacherEmail, confirmationUrl);
 
                     return ResponseEntity.ok("ok");
                 } catch (Throwable e) {
