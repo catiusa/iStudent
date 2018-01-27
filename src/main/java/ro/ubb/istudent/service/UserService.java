@@ -13,4 +13,6 @@ public interface UserService {
     UserDTO findByUserName(String userName);
 
     List<UserDTO> getAll();
+
+    boolean updateUser(UserDTO userDTO);
 }

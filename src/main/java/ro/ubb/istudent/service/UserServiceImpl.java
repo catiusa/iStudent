@@ -35,10 +35,24 @@ public class UserServiceImpl implements UserService {
         User user = dtoToEntityMapper.toUser(userDTO);
         String password = bCryptPasswordEncoder.encode(user.getPassword());
         user.setPassword(password);
-        if(userRepository.save(user) != null) {
-          //  System.out.println("not able");
+        if (userRepository.save(user) != null) {
+            //  System.out.println("not able");
         }
         return userRepository.save(user) != null;
+    }
+
+    @Override
+    public boolean updateUser(UserDTO userDTO) {
+        User user = dtoToEntityMapper.toUser(userDTO);
+        String password = bCryptPasswordEncoder.encode(user.getPassword());
+        user.setPassword(password);
+        Optional<User> u = userRepository.findByEmail(user.getEmail());
+        if (u.isPresent()) {
+            userRepository.delete(u.get().getId());
+            userRepository.save(user);
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -57,9 +71,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<UserDTO> getAll() {
-        List<User> users =  userRepository.findAll();
+        List<User> users = userRepository.findAll();
         List<UserDTO> dtoList = new ArrayList<>();
-        for(User u : users){
+        for (User u : users) {
             dtoList.add(entityDTOMapper.toUserDTO(u));
         }
         return dtoList;

@@ -2,11 +2,13 @@ package ro.ubb.istudent.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 import ro.ubb.istudent.dto.UserDTO;
 import ro.ubb.istudent.service.UserService;
-
-import java.util.Date;
 
 @RestController
 @RequestMapping("/user")
@@ -32,22 +34,17 @@ public class UserController {
 
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     public ResponseEntity<?> updateUser(@RequestBody UserDTO userDTO) {
-        boolean saved = false;
-        try {
-            saved = userService.saveUser(userDTO);
-        } catch (Throwable e) {
-            e.printStackTrace();
-        }
-        return ResponseEntity.ok(saved);
+        boolean updated = userService.updateUser(userDTO);
+        return ResponseEntity.ok(updated);
     }
 
     @RequestMapping(value = "/findByEmail/{email:.+}", method = RequestMethod.GET)
-    public ResponseEntity<?> getUserByEmail(@PathVariable String email){
+    public ResponseEntity<?> getUserByEmail(@PathVariable String email) {
         return ResponseEntity.ok(userService.findByEmail(email));
     }
 
     @RequestMapping(value = "/getAll", method = RequestMethod.GET)
-    public ResponseEntity<?> getAll(){
+    public ResponseEntity<?> getAll() {
         return ResponseEntity.ok(userService.getAll());
     }
 
