@@ -21,6 +21,7 @@ import ro.ubb.istudent.dto.UserDTO;
 import ro.ubb.istudent.repository.ValidTokenRepository;
 import ro.ubb.istudent.security.TokenUtils;
 import ro.ubb.istudent.service.UserService;
+import ro.ubb.istudent.util.MessageSender;
 
 import javax.mail.internet.MimeMessage;
 import javax.servlet.http.Cookie;
@@ -55,8 +56,6 @@ public class TeacherController {
         this.userService = userService;
     }
 
-    @Autowired
-    private JavaMailSender mailSender;
 
     @Loggable
     @RequestMapping(value = "/add", method = RequestMethod.POST)
@@ -86,14 +85,9 @@ public class TeacherController {
                     String confirmationUrl = "/teacher/registration?token=" + token + "&email=" + teacherEmail;
 
 
-                    MimeMessage message = mailSender.createMimeMessage();
-                    MimeMessageHelper helper = new MimeMessageHelper(message);
+                    MessageSender m = new MessageSender(2);
+                    m.sendMessage(teacherAddress, confirmationUrl);
 
-                    helper.setTo(teacherAddress);
-                    helper.setText(EMAIL_TEXT + " http://localhost:8080" + confirmationUrl);
-                    helper.setSubject(SUBJECT);
-
-                    mailSender.send(message);
                     return ResponseEntity.ok("ok");
                 } catch (Throwable e) {
                     e.printStackTrace();
